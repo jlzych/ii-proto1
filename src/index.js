@@ -91,6 +91,72 @@ class Editor extends React.Component {
   }
 }
 
+class EditorCE extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.editorDiv = React.createRef();
+
+    this.handleClick = this.handleClick.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+  }
+
+  handleClick() {
+    if (!this.props.showText) {
+      const range = document.createRange();
+      const sel = window.getSelection();
+      let lastChild = this.editorDiv.current.childNodes[
+        this.editorDiv.current.childNodes.length - 1];
+
+      // If the last child has more children, select that child
+      if (lastChild && lastChild.childNodes && lastChild.childNodes.length > 0) {
+        lastChild = lastChild.childNodes[lastChild.childNodes.length - 1];
+      }
+
+      if (lastChild && lastChild.textContent) {
+        range.setStart(lastChild, lastChild.textContent.length);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    }
+  }
+
+  handleKeyDown(event) {
+    const preventedKeystrokes = [
+      8, // Backspace
+      37, // Left arrow
+      38, // Top arrow
+      39, // Right arrow
+      40 // Bottom arrow
+    ];
+
+    if (preventedKeystrokes.includes(event.keyCode)) {
+      event.preventDefault();
+    }
+  }
+
+  render() {
+    const classes = "text" +
+      (this.props.showText ? "" : " writing-mode");
+
+    return (
+      <div>
+        <h2>EditorCE</h2>
+        <div
+          className={classes}
+          contentEditable={this.props.showText ? false : true}
+          onClick={this.handleClick}
+          onKeyDown={this.handleKeyDown}
+          ref={this.editorDiv}
+          spellCheck={false}>
+          {/* {this.props.text} */}
+        </div>
+      </div>
+    );
+  }
+}
+
 class InvisibleInk extends React.Component {
   constructor(props) {
     super(props);
@@ -130,8 +196,12 @@ class InvisibleInk extends React.Component {
           handleClearText={() => this.handleClearText()}
           handleToggleShowText={() => this.handleToggleShowText()}
         />
-        <Editor
+        {/* <Editor
           handleUpdateText={this.handleUpdateText}
+          showText={this.state.showText}
+          text={this.state.text} /> */}
+
+        <EditorCE
           showText={this.state.showText}
           text={this.state.text} />
       </div>
