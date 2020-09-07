@@ -21,6 +21,12 @@ export class Toolbar extends React.Component {
         >
           Clear
         </button>
+        <button
+          onClick={this.props.handleUndo}
+          disabled={this.props.undoDisabled}
+        >
+          Undo Clear
+        </button>
       </div>
     );
   }
