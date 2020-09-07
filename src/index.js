@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ContentEditable from 'react-contenteditable';
 import './index.css';
 
 class Toolbar extends React.Component {
@@ -97,11 +98,12 @@ class EditorCE extends React.Component {
 
     this.editorDiv = React.createRef();
 
-    this.handleClick = this.handleClick.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
+    this.handleOnChange = this.handleOnChange.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
-  handleClick() {
+  handleFocus() {
     if (!this.props.showText) {
       const range = document.createRange();
       const sel = window.getSelection();
@@ -134,6 +136,11 @@ class EditorCE extends React.Component {
     if (preventedKeystrokes.includes(event.keyCode)) {
       event.preventDefault();
     }
+
+  }
+
+  handleOnChange(event) {
+    this.props.handleUpdateText(event.target.value);
   }
 
   render() {
@@ -143,15 +150,16 @@ class EditorCE extends React.Component {
     return (
       <div>
         <h2>EditorCE</h2>
-        <div
+        <ContentEditable
           className={classes}
-          contentEditable={this.props.showText ? false : true}
-          onClick={this.handleClick}
+          disabled={this.props.showText ? true : false}
+          onFocus={this.handleFocus}
           onKeyDown={this.handleKeyDown}
-          ref={this.editorDiv}
-          spellCheck={false}>
-          {/* {this.props.text} */}
-        </div>
+          onChange={this.handleOnChange}
+          html={this.props.text}
+          innerRef={this.editorDiv}
+          spellCheck={false}
+        />
       </div>
     );
   }
@@ -202,6 +210,7 @@ class InvisibleInk extends React.Component {
           text={this.state.text} /> */}
 
         <EditorCE
+          handleUpdateText={this.handleUpdateText}
           showText={this.state.showText}
           text={this.state.text} />
       </div>
