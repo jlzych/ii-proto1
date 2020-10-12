@@ -57,7 +57,7 @@ export class EditorCE extends React.Component {
 
     return (
       <div>
-        <h2>EditorCE</h2>
+        <h2>Editor</h2>
         <ContentEditable
           className={classes}
           disabled={this.props.showText ? true : false}

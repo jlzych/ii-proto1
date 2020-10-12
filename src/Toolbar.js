@@ -27,6 +27,10 @@ export class Toolbar extends React.Component {
         >
           Undo Clear
         </button>
+        <button
+          disabled={this.props.textEmpty}
+          onClick={this.props.handleCopy}
+        >Copy</button>
       </div>
     );
   }
