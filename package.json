@@ -14,6 +14,7 @@
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
     "react-toastify": "^6.0.9",
+    "turndown": "^7.0.0",
     "yarn": "^1.22.5"
   },
   "scripts": {

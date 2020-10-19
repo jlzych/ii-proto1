@@ -6,6 +6,7 @@ import { EditorCE } from './EditorCE';
 import copy from 'copy-to-clipboard';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import TurndownService from 'turndown';
 
 class InvisibleInk extends React.Component {
   constructor(props) {
@@ -22,22 +23,17 @@ class InvisibleInk extends React.Component {
   }
 
   handleCopy() {
-    let text = this.state.text;
-    // Regex's taken from here, which has more
-    // tag types if necessary
-    // https://stackoverflow.com/questions/15180173/convert-html-to-plain-text-in-js-without-browser-environment/15180206
+    let turndownService = new TurndownService();
+    let markdown = turndownService.turndown(this.state.text);
 
-    // Replace div, p, and br tags with newlines
-    text = text.replace(/<\/div>/ig, '\n');
-    text = text.replace(/<br\s*[\/]?>/gi, '\n');
-    text = text.replace(/<\/p>/ig, '\n');
-    // Remove all other tags
-    text = text.replace(/(<([^>]+)>)/gi, "");
-
-    if (copy(text)) {
+    try {
+      copy(markdown, {
+        format: 'text/plain'
+      });
       toast("Copied text. Now get to editing!");
-    } else {
-      toast("Could not copy text :(");
+    } catch (error) {
+      console.warning("Error copying text");
+      console.log(error);
     }
   }
 

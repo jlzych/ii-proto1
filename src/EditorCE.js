@@ -13,22 +13,30 @@ export class EditorCE extends React.Component {
   }
 
   handleFocus() {
-    if (!this.props.showText) {
-      const range = document.createRange();
-      const sel = window.getSelection();
-      let lastChild = this.editorDiv.current.childNodes[this.editorDiv.current.childNodes.length - 1];
+    // There's an error in here because there can be child
+    // nodes, so setting range in that case wil fail,
+    // so I need some sort of recursive function
+    try {
+      if (!this.props.showText) {
+        const range = document.createRange();
+        const sel = window.getSelection();
+        let lastChild = this.editorDiv.current.childNodes[this.editorDiv.current.childNodes.length - 1];
 
-      // If the last child has more children, select that child
-      if (lastChild && lastChild.childNodes && lastChild.childNodes.length > 0) {
-        lastChild = lastChild.childNodes[lastChild.childNodes.length - 1];
-      }
+        // If the last child has more children, select that child
+        if (lastChild && lastChild.childNodes && lastChild.childNodes.length > 0) {
+          lastChild = lastChild.childNodes[lastChild.childNodes.length - 1];
+        }
 
-      if (lastChild && lastChild.textContent) {
-        range.setStart(lastChild, lastChild.textContent.length);
-        range.collapse(true);
-        sel.removeAllRanges();
-        sel.addRange(range);
+        if (lastChild && lastChild.textContent) {
+          range.setStart(lastChild, lastChild.textContent.length);
+          range.collapse(true);
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
       }
+    } catch (error) {
+      console.warn("Error putting cursor at the end due to nested html.");
+      console.log(error);
     }
   }
 
