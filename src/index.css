@@ -14,6 +14,11 @@ body {
   box-sizing: border-box;
 }
 
+:root {
+  --highlight-color: rebeccapurple;
+  --shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -30,19 +35,6 @@ div {
   width: 100%;
 }
 
-.editor {
-  position: relative;
-}
-
-.editor .text-input {
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  pointer-events: none;
-}
-
 .text {
   background: white;
   border: 2px solid transparent;
@@ -50,43 +42,31 @@ div {
   color: black;
   width: 100%;
   min-height: 200px;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.3);
   padding: 0.5em;
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 
-  transition: border .2s ease-in;
+  transition: border .1s ease-in;
 }
 
 .text.writing-mode {
-  color: rgba(0,0,0,0.03);
+  color: rgba(0,0,0,0.02);
   cursor: default;
+  caret-color: var(--highlight-color);
+}
+
+.text.writing-mode:focus {
+  box-shadow: var(--shadow);
+  border-color: var(--highlight-color);
+  outline: 0;
 }
 
 .text.writing-mode::selection {
   background-color: transparent;
 }
 
-.text-input:focus ~ .text {
-  border: 2px solid rebeccapurple;
-}
-
-@keyframes blink {
-  0% { opacity: 0; }
-  35% { opacity: 0; }
-  40% { opacity: 1; }
-}
-
-.text-input:focus ~ .text .text-wrapper::after {
-  animation: 1.1s ease-in blink infinite;
-  content: '';
-  display: inline-block;
-  width: 1px;
-  height: 1.2em;
-  background-color: #111;
-}
-
 .writing-prompt {
+  border-radius: 4px;
   width: 100%;
   font-size: 1.25em;
   font-family: -apple-system,
@@ -100,13 +80,14 @@ div {
     'Droid Sans',
     'Helvetica Neue',
     sans-serif;
-  border: 0;
-  border-bottom: 1px solid black;
+  border: 2px solid transparent;
   margin-bottom: 1em;
   padding: 0.25em;
+  transition: border .1s ease-in;
 }
 
 .writing-prompt:focus {
-  border-bottom-color: rebeccapurple;
+  border-color: var(--highlight-color);
+  box-shadow: var(--shadow);
   outline: 0;
 }
