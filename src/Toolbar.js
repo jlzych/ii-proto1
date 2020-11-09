@@ -1,4 +1,10 @@
 import React from 'react';
+import { ToolbarContainer } from './components/Containers';
+import { IconButton } from './components/Buttons';
+import { ReactComponent as Lightbulb } from './LightBulb.svg';
+import { ReactComponent as Copy } from './Copy.svg';
+import { ReactComponent as Clear } from './Clear.svg';
+import { ReactComponent as Undo } from './Undo.svg';
 
 export class Toolbar extends React.Component {
   constructor(props) {
@@ -8,30 +14,37 @@ export class Toolbar extends React.Component {
 
   render() {
     return (
-      <div className="toolbar">
-        <label>
-          <input
-            type="checkbox"
-            checked={this.props.showText}
-            onChange={this.handleToggleShowText} />
-          Show text
-        </label>
-        <button
-          onClick={this.props.handleClearText}
+      <ToolbarContainer focusModeEnabled={this.props.focusModeEnabled}>
+        <IconButton
+          onClick={this.handleToggleShowText}
+          inverted={this.props.showText}>
+          <Lightbulb />
+          <span>
+            { this.props.showText ? 'Writing Mode' : 'Show Text' }
+          </span>
+        </IconButton>
+        <IconButton
+          onClick={this.props.handleCopy}
+          disabled={this.props.textEmpty}
         >
-          Clear
-        </button>
-        <button
+          <Copy />
+          <span>Copy</span>
+        </IconButton>
+        <IconButton
+          onClick={this.props.handleClearText}
+          disabled={this.props.textEmpty}
+        >
+          <Clear />
+          <span>Clear</span>
+        </IconButton>
+        <IconButton
           onClick={this.props.handleUndo}
           disabled={this.props.undoDisabled}
         >
-          Undo Clear
-        </button>
-        <button
-          disabled={this.props.textEmpty}
-          onClick={this.props.handleCopy}
-        >Copy</button>
-      </div>
+          <Undo />
+          <span>Undo Clear</span>
+        </IconButton>
+      </ToolbarContainer>
     );
   }
 }
